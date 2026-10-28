@@ -4,6 +4,12 @@ when:
   - event: [push, manual]
  
 steps:
+  zer0:
+    image: alpine:3.20
+    commands:
+      - echo "not affected, exiting with 78"
+      - exit 1
+
   first:
     image: alpine:3.20
     commands:
