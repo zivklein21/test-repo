@@ -1,0 +1,17 @@
+skip_clone: true
+ 
+when:
+  - event: [push, manual]
+ 
+steps:
+  first:
+    image: alpine:3.20
+    commands:
+      - echo "not affected, exiting with 78"
+      - exit 78
+ 
+  second:
+    image: alpine:3.20
+    commands:
+      - echo "IF YOU SEE THIS, THE SKIP DID NOT WORK"
+ 
