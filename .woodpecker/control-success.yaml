@@ -1,0 +1,20 @@
+# CONTROL: normal exit 0 -> expected: both steps green, workflow green
+labels:
+  skip78: "true"
+
+skip_clone: true
+
+when:
+  - event: [push, manual]
+
+steps:
+  first:
+    image: alpine:3.20
+    commands:
+      - echo "normal step"
+      - exit 0
+
+  second:
+    image: alpine:3.20
+    commands:
+      - echo "second step runs as usual"

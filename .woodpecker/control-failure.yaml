@@ -1,0 +1,20 @@
+# CONTROL: normal failure -> expected: first red, second grey, workflow red
+labels:
+  skip78: "true"
+
+skip_clone: true
+
+when:
+  - event: [push, manual]
+
+steps:
+  first:
+    image: alpine:3.20
+    commands:
+      - echo "failing on purpose"
+      - exit 1
+
+  second:
+    image: alpine:3.20
+    commands:
+      - echo "should not run after a failure"

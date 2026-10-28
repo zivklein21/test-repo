@@ -1,23 +1,20 @@
+# THE TEST: first exits 78 -> expected: first green, second grey, workflow green
+labels:
+  skip78: "true"
+
 skip_clone: true
- 
+
 when:
   - event: [push, manual]
- 
-steps:
-  zer0:
-    image: alpine:3.20
-    commands:
-      - echo "not affected, exiting with 78"
-      - exit 1
 
+steps:
   first:
     image: alpine:3.20
     commands:
       - echo "not affected, exiting with 78"
       - exit 78
- 
+
   second:
     image: alpine:3.20
     commands:
       - echo "IF YOU SEE THIS, THE SKIP DID NOT WORK"
- 
