@@ -1,0 +1,11 @@
+# EXPECT LINT: ERROR `max_restarts` is only allowed for the `restart` signal
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 78]
+    signals:
+      skip:
+        exit_codes: 78
+        max_restarts: 2

@@ -1,0 +1,63 @@
+# PAUSE pipeline: runs when pause.txt changes (or on manual run).
+# Two matrix entries pause at the same point: resume one, decline the other.
+labels:
+  skip78: "true"
+
+when:
+  - event: push
+    path: pause.txt
+  - event: manual
+
+skip_clone: true
+
+matrix:
+  TRY:
+    - resume
+    - decline
+
+steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        PIPELINE: pause signal (this entry: TRY=${TRY})
+        STEPS:
+          build      runs
+          approve    exits 71 (pause: 71) -> green, then the workflow PAUSES (orange icon)
+                     after slow-tests (running in parallel) has finished
+          slow-tests sleeps 15s, finishes normally
+          deploy     waits for your decision
+        WHAT TO DO: in the workflow list click
+          - TRY=resume  -> Resume  -> deploy runs, workflow green
+          - TRY=decline -> Decline -> deploy never runs, workflow killed
+        The other entry is not affected by your click.
+    commands:
+      - echo "$${DESCRIPTION}"
+
+  build:
+    image: alpine
+    commands:
+      - echo "build for TRY=${TRY}"
+    depends_on: [describe]
+
+  approve:
+    image: alpine
+    commands:
+      - echo "please ${TRY} this workflow in the UI"
+      - exit 71
+    signals:
+      pause: 71
+    depends_on: [build]
+
+  slow-tests:
+    image: alpine
+    commands:
+      - sleep 15
+      - echo "tests done"
+    depends_on: [build]
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy after resume (TRY=${TRY})"
+    depends_on: [approve, slow-tests]
