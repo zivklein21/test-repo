@@ -1,0 +1,46 @@
+# PAUSE TIMEOUT (resume): runs together with pause.yaml when pause.txt changes (or on manual run).
+# Don't click anything: after 1 minute the timeout decides.
+labels:
+  skip78: "true"
+
+when:
+  - event: push
+    path: pause.txt
+  - event: manual
+
+skip_clone: true
+
+steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        PIPELINE: pause signal with timeout (this entry: on_timeout=resume)
+        STEPS:
+          approve  exits 71 (pause, timeout: 1m, on_timeout: resume) -> green, workflow PAUSED
+          deploy   waits
+        WHAT TO DO: nothing, wait 1 minute.
+          - on_timeout=decline -> workflow killed, deploy never runs
+          - on_timeout=resume  -> deploy runs, workflow green
+        The log of `approve` shows:
+          --- woodpecker: workflow paused, waiting up to 1m0s for resume or decline, then: resume ---
+          --- woodpecker: no decision within 1m0s, workflow ... ---
+        You can still click Resume / Decline before the minute is over.
+    commands:
+      - echo "$${DESCRIPTION}"
+
+  approve:
+    image: alpine
+    commands:
+      - echo "pausing for at most 1 minute, then resume"
+      - exit 71
+    signals:
+      pause:
+        exit_codes: 71
+        timeout: 1m
+        on_timeout: resume
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy (on_timeout=resume)"
