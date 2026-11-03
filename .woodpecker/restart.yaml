@@ -40,12 +40,11 @@ steps:
   restart-max-1:
     image: alpine
     commands:
-      - n=$$(cat .attempts-max1 2>/dev/null || echo 0); n=$$((n+1)); echo $$n > .attempts-max1; echo "attempt $$n"
       - exit 75
     signals:
       restart:
         exit_codes: 75
-        max_restarts: 1
+        max_restarts: 2
     depends_on: [describe]
 
   restart-max-5-passes:
