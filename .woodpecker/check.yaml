@@ -1,0 +1,17 @@
+steps:
+  description:
+    image: alpine:latest
+    commands:
+      - echo "Expected to:skip the check2 step but exit with successfull status"
+
+  check-1:
+    image: alpine:latest
+    commands:
+      - exit 78
+    signals:
+      skip: 78
+      
+  check-2:
+    image: alpine:latest
+    commands:
+      - echo "This step should be skipped"
