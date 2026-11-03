@@ -1,0 +1,21 @@
+# EXPECT: exit 2 is in success list [1, 2] -> build RUNS, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  lint:
+    image: alpine
+    commands:
+      - exit 2
+    signals:
+      success: [1, 2]
+
+  build:
+    image: alpine
+    commands:
+      - echo "build RUNS"

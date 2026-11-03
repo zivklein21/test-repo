@@ -1,0 +1,9 @@
+# EXPECT LINT: ERROR Unknown signal `pause_forever`
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 78]
+    signals:
+      pause_forever: 78

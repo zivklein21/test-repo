@@ -1,0 +1,36 @@
+# EXPECT: app-a: check green, build+push skipped (grey). app-b: affected, build+push run. all workflows success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  include:
+    - NAME: app-a
+    - NAME: app-b
+
+steps:
+  check-affected:
+    image: alpine
+    commands:
+      # real pipeline: npx nx show projects --affected --base=$${CI_PREV_COMMIT_SHA} --type app > affected.txt
+      - echo "app-b" > affected.txt
+      - grep -qx "${NAME}" affected.txt || { echo "${NAME} not affected"; exit 78; }
+      - echo "${NAME} affected"
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "building ${NAME}"
+    depends_on: [check-affected]
+
+  push:
+    image: alpine
+    commands:
+      - echo "pushing ${NAME}"
+    depends_on: [build]

@@ -1,0 +1,36 @@
+# EXPECT: only app-a/prod runs build+deploy; other 3 combinations skip; all success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  NAME:
+    - app-a
+    - app-b
+  ENV:
+    - dev
+    - prod
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - if [ "${NAME}" != "app-a" ] || [ "${ENV}" != "prod" ]; then exit 78; fi
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "build ${NAME} for ${ENV}"
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy ${NAME} to ${ENV}"
+    when:
+      - status: [success, failure]

@@ -1,0 +1,21 @@
+# EXPECT: check exits 79 (in list) -> build skipped, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - exit 79
+    signals:
+      skip: [78, 79]
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

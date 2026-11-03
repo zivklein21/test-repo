@@ -1,0 +1,13 @@
+# EXPECT LINT: WARNING restart is not applied to detached steps and services
+skip_clone: true
+
+steps:
+  db:
+    image: alpine
+    detach: true
+    commands: [exit 75]
+    signals:
+      restart: 75
+  test:
+    image: alpine
+    commands: [echo test]

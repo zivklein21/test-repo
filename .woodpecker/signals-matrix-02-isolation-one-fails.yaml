@@ -1,0 +1,31 @@
+# EXPECT: app-a skips (success), app-b build fails (FAILURE), app-c builds (success) -> skip in one entry does not touch others
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  include:
+    - NAME: app-a
+      MODE: skip
+    - NAME: app-b
+      MODE: fail
+    - NAME: app-c
+      MODE: build
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - if [ "${MODE}" = "skip" ]; then exit 78; fi
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "building ${NAME}"
+      - if [ "${MODE}" = "fail" ]; then exit 1; fi

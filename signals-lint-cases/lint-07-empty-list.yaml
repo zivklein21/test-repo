@@ -1,0 +1,9 @@
+# EXPECT LINT: ERROR No exit code configured for signal `skip`
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 78]
+    signals:
+      skip: []

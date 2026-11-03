@@ -1,0 +1,26 @@
+# EXPECT (server): approve exits 71 -> workflow PAUSED (orange) with Resume/Decline buttons. Resume -> deploy runs, success. Decline -> deploy never runs, workflow KILLED
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  build:
+    image: alpine
+    commands:
+      - echo "built, waiting for approval before deploy"
+
+  approve:
+    image: alpine
+    commands:
+      - exit 71
+    signals:
+      pause: 71
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy RUNS after resume"

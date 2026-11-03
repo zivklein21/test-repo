@@ -1,0 +1,30 @@
+# EXPECT (server): approve pauses only after slow-tests finished (~10s); then Resume -> deploy runs
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  approve:
+    image: alpine
+    commands:
+      - exit 71
+    signals:
+      pause: 71
+    depends_on: []
+
+  slow-tests:
+    image: alpine
+    commands:
+      - sleep 10
+      - echo "tests done"
+    depends_on: []
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy"
+    depends_on: [approve, slow-tests]

@@ -1,0 +1,28 @@
+# EXPECT: app-a cancels itself (KILLED, build never runs); app-b builds (success) -> cancel only affects its own workflow
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  include:
+    - NAME: app-a
+      CANCEL: "true"
+    - NAME: app-b
+      CANCEL: "false"
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - if [ "${CANCEL}" = "true" ]; then exit 70; fi
+    signals:
+      cancel: 70
+
+  build:
+    image: alpine
+    commands:
+      - echo "build ${NAME}"

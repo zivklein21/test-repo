@@ -13,6 +13,8 @@ steps:
     commands:
       - echo "not affected, exiting with 78"
       - exit 78
+    signals:
+      skip: 78
 
   second:
     image: alpine:3.20

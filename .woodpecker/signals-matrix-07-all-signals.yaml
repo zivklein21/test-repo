@@ -1,0 +1,32 @@
+# EXPECT per entry: CODE=0 build runs | 1 success->build runs | 78 skip->build skipped | 75 restart x3 then FAILURE | 9 unmapped FAILURE
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  CODE:
+    - 0
+    - 1
+    - 78
+    - 75
+    - 9
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - echo "exiting with ${CODE}"
+      - exit ${CODE}
+    signals:
+      success: 1
+      skip: 78
+      restart: 75
+
+  build:
+    image: alpine
+    commands:
+      - echo "build for CODE=${CODE}"

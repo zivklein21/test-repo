@@ -1,0 +1,9 @@
+# EXPECT LINT: WARNING only (137 = OOM/SIGKILL), lint passes
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 137]
+    signals:
+      skip: 137

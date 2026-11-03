@@ -1,0 +1,21 @@
+# EXPECT: check exits 0 -> everything runs, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - echo "affected -> continue"
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "build RUNS"

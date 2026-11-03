@@ -1,0 +1,9 @@
+# EXPECT LINT: ERROR Exit code 256 is out of range 1-255
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 1]
+    signals:
+      skip: 256

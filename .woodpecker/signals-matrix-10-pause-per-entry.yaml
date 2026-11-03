@@ -1,0 +1,31 @@
+# EXPECT (server): prod entry PAUSES with its own Resume/Decline buttons; dev entry runs through without pausing; resume/decline prod only affects prod
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+matrix:
+  ENV:
+    - dev
+    - prod
+
+steps:
+  build:
+    image: alpine
+    commands:
+      - echo "build for ${ENV}"
+
+  approve:
+    image: alpine
+    commands:
+      - if [ "${ENV}" = "prod" ]; then echo "prod needs approval"; exit 71; fi
+    signals:
+      pause: 71
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy to ${ENV}"

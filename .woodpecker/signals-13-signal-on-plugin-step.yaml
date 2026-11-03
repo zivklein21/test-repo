@@ -1,0 +1,21 @@
+# EXPECT: signals allowed on a plugin step too (lint must pass). Run with docker backend only
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  plugin-check:
+    image: alpine
+    settings:
+      foo: bar
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "build"

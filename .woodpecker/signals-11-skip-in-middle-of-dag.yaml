@@ -1,0 +1,34 @@
+# EXPECT: prepare runs, check skips, build+push skipped, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  prepare:
+    image: alpine
+    commands:
+      - echo "prepare RUNS"
+
+  check:
+    image: alpine
+    commands:
+      - exit 78
+    signals:
+      skip: 78
+    depends_on: [prepare]
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"
+    depends_on: [check]
+
+  push:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"
+    depends_on: [build]

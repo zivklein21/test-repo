@@ -1,0 +1,33 @@
+# EXPECT: one step maps 3 signals; exits 1 -> success, next step runs; second step exits 78 -> skip; deploy skipped; workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  lint:
+    image: alpine
+    commands:
+      - exit 1
+    signals:
+      skip: 78
+      success: [1, 2]
+      restart: 75
+
+  check:
+    image: alpine
+    commands:
+      - echo "lint was ok, now skip the rest"
+      - exit 78
+    signals:
+      skip: 78
+      success: [1, 2]
+      restart: 75
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

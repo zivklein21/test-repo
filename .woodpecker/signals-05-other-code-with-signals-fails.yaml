@@ -1,0 +1,21 @@
+# EXPECT: skip: 78 but exit 1 -> workflow=FAILURE
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - exit 1
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

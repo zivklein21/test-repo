@@ -1,0 +1,27 @@
+# EXPECT: lint fails with failure: ignore, then skip -> build skipped, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  lint:
+    image: alpine
+    commands:
+      - exit 1
+    failure: ignore
+
+  check:
+    image: alpine
+    commands:
+      - exit 78
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

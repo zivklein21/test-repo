@@ -1,0 +1,19 @@
+# EXPECT: no signals: -> exit 78 is a normal failure, build skipped as failure, workflow=FAILURE
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - exit 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

@@ -1,0 +1,31 @@
+# EXPECT: check exits 70 (cancel) -> check green, slow-sibling stopped (killed), deploy never runs, workflow=KILLED
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - echo "something is wrong with the inputs, stop this workflow"
+      - exit 70
+    signals:
+      cancel: 70
+    depends_on: []
+
+  slow-sibling:
+    image: alpine
+    commands:
+      - sleep 30
+      - echo "SHOULD NOT FINISH"
+    depends_on: []
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"
+    depends_on: [check, slow-sibling]

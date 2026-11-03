@@ -1,0 +1,9 @@
+# EXPECT LINT: ERROR Exit code 0 is out of range 1-255
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 0]
+    signals:
+      skip: 0

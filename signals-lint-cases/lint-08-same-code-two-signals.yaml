@@ -1,0 +1,10 @@
+# EXPECT LINT: ERROR Exit code 78 is mapped to both signal `skip` and `success`
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 78]
+    signals:
+      skip: 78
+      success: 78

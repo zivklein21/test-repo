@@ -1,0 +1,26 @@
+# EXPECT: check decides at runtime from a file written by an earlier step; build skipped, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  compute:
+    image: alpine
+    commands:
+      - echo "app-b" > affected.txt
+
+  check:
+    image: alpine
+    commands:
+      - grep -qx app-a affected.txt || exit 78
+    signals:
+      skip: 78
+
+  build:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"

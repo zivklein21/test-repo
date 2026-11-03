@@ -1,0 +1,30 @@
+# EXPECT: first step fails, on-failure step sends skip -> notify skipped, workflow STAYS FAILURE
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  broken:
+    image: alpine
+    commands:
+      - exit 1
+
+  check-on-failure:
+    image: alpine
+    commands:
+      - exit 78
+    signals:
+      skip: 78
+    when:
+      - status: [failure]
+
+  notify:
+    image: alpine
+    commands:
+      - echo "SHOULD NOT RUN"
+    when:
+      - status: [success, failure]

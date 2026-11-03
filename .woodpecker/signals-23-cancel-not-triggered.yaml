@@ -1,0 +1,21 @@
+# EXPECT: cancel: 70 but exit 0 -> everything runs, workflow=success
+labels:
+  skip78: "true"
+
+when:
+  - event: [push, manual]
+
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands:
+      - echo "inputs ok"
+    signals:
+      cancel: 70
+
+  deploy:
+    image: alpine
+    commands:
+      - echo "deploy RUNS"

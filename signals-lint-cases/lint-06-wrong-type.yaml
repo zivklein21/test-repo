@@ -1,0 +1,9 @@
+# EXPECT LINT: ERROR parse/schema: skip must be int or list of ints
+skip_clone: true
+
+steps:
+  check:
+    image: alpine
+    commands: [exit 78]
+    signals:
+      skip: "abc"
