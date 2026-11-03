@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     23-cancel-not-triggered
+        SIGNALS:  cancel: 70
+        EXPECT:   cancel: 70 but exit 0
+               -> everything runs, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

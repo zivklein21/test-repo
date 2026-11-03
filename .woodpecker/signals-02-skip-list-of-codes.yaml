@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     02-skip-list-of-codes
+        SIGNALS:  skip: [78, 79]
+        EXPECT:   check exits 79 (in list)
+               -> build skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

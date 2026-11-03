@@ -18,6 +18,24 @@ matrix:
     - 9
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-11-every-signal
+        SIGNALS:  cancel: 70, pause: 71, restart: 75, skip: 78, success: 1
+        MATRIX:   CODE=${CODE}
+        EXPECT:   per matrix entry (pause needs server UI):
+                  0 runs
+                  1 success->build runs
+                  78 skip->build skipped
+                  75 restart x3->FAILURE
+                  70 cancel->KILLED
+                  71 pause->PAUSED
+                  9 FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

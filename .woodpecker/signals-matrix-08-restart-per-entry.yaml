@@ -17,6 +17,17 @@ matrix:
       PASS_ON: 9
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-08-restart-per-entry
+        SIGNALS:  restart: 75
+        MATRIX:   NAME=${NAME} PASS_ON=${PASS_ON}
+        EXPECT:   each entry has its own counter; app-a passes on attempt 2, app-b on attempt 3, app-c never (FAILURE after 3)
+    commands:
+      - echo "$${DESCRIPTION}"
+
   deploy:
     image: alpine
     commands:

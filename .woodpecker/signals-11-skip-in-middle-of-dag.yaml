@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     11-skip-in-middle-of-dag
+        SIGNALS:  skip: 78
+        EXPECT:   prepare runs, check skips, build+push skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+    depends_on: []
+
   prepare:
     image: alpine
     commands:

@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     19-restart-limit
+        SIGNALS:  restart: 75
+        EXPECT:   always exits 75
+               -> runs 3 times, then fails with exit 75, workflow=FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   always-flaky:
     image: alpine
     commands:

@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     09-earlier-failure-stays
+        SIGNALS:  skip: 78
+        EXPECT:   first step fails, on-failure step sends skip
+               -> notify skipped, workflow STAYS FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   broken:
     image: alpine
     commands:

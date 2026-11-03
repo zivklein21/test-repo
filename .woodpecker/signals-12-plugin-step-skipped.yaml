@@ -8,6 +8,16 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     12-plugin-step-skipped
+        SIGNALS:  skip: 78
+        EXPECT:   check=success, build skipped (grey), workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

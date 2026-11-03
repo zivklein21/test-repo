@@ -8,6 +8,16 @@ when:
   - event: [push, manual]
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     control-success
+        SIGNALS:  -
+        EXPECT:   both steps green, workflow green (normal exit 0, no signals)
+    commands:
+      - echo "$${DESCRIPTION}"
+
   first:
     image: alpine:3.20
     commands:

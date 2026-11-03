@@ -8,6 +8,16 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     06-cleanup-also-skipped
+        SIGNALS:  skip: 78
+        EXPECT:   cleanup with status [success, failure] is ALSO skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

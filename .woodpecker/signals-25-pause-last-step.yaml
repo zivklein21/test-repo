@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     25-pause-last-step
+        SIGNALS:  pause: 71
+        EXPECT:   pause in the last stage
+               -> nothing left to wait for, workflow does NOT pause, success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   build:
     image: alpine
     commands:

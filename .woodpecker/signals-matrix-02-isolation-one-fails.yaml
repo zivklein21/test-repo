@@ -17,6 +17,18 @@ matrix:
       MODE: build
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-02-isolation-one-fails
+        SIGNALS:  skip: 78
+        MATRIX:   NAME=${NAME} MODE=${MODE}
+        EXPECT:   app-a skips (success), app-b build fails (FAILURE), app-c builds (success)
+               -> skip in one entry does not touch others
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     15-success-continues
+        SIGNALS:  success: 1
+        EXPECT:   lint exits 1 (mapped to success)
+               -> lint green, build RUNS, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   lint:
     image: alpine
     commands:

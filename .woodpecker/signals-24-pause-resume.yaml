@@ -8,6 +8,19 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     24-pause-resume
+        SIGNALS:  pause: 71
+        EXPECT:   (needs server UI) approve exits 71
+               -> workflow PAUSED (orange) with Resume/Decline buttons. Resume
+               -> deploy runs, success. Decline
+               -> deploy never runs, workflow KILLED
+    commands:
+      - echo "$${DESCRIPTION}"
+
   build:
     image: alpine
     commands:

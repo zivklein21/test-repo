@@ -16,6 +16,22 @@ matrix:
     - 9
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-07-all-signals
+        SIGNALS:  restart: 75, skip: 78, success: 1
+        MATRIX:   CODE=${CODE}
+        EXPECT:   per matrix entry:
+                  CODE=0 build runs
+                  1 success->build runs
+                  78 skip->build skipped
+                  75 restart x3 then FAILURE
+                  9 unmapped FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

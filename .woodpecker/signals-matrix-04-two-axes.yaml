@@ -16,6 +16,17 @@ matrix:
     - prod
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-04-two-axes
+        SIGNALS:  skip: 78
+        MATRIX:   NAME=${NAME} ENV=${ENV}
+        EXPECT:   only app-a/prod runs build+deploy; other 3 combinations skip; all success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

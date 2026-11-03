@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     04-unmapped-78-fails
+        SIGNALS:  -
+        EXPECT:   no signals:
+               -> exit 78 is a normal failure, build skipped as failure, workflow=FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

@@ -8,6 +8,16 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     13-signal-on-plugin-step
+        SIGNALS:  skip: 78
+        EXPECT:   signals allowed on a plugin step too (lint must pass). Run with docker backend only
+    commands:
+      - echo "$${DESCRIPTION}"
+
   plugin-check:
     image: alpine
     settings:

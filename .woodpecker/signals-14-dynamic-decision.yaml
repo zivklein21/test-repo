@@ -8,6 +8,16 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     14-dynamic-decision
+        SIGNALS:  skip: 78
+        EXPECT:   check decides at runtime from a file written by an earlier step; build skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   compute:
     image: alpine
     commands:

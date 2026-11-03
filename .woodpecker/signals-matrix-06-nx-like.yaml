@@ -13,6 +13,18 @@ matrix:
     - NAME: app-b
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-06-nx-like
+        SIGNALS:  skip: 78
+        MATRIX:   NAME=${NAME}
+        EXPECT:   app-a: check green, build+push skipped (grey). app-b: affected, build+push run. all workflows success
+    commands:
+      - echo "$${DESCRIPTION}"
+    depends_on: []
+
   check-affected:
     image: alpine
     commands:

@@ -8,6 +8,18 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     21-all-signals-one-step
+        SIGNALS:  restart: 75, skip: 78, success: [1, 2]
+        EXPECT:   one step maps 3 signals; exits 1
+               -> success, next step runs; second step exits 78
+               -> skip; deploy skipped; workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   lint:
     image: alpine
     commands:

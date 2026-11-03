@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     18-restart-then-success
+        SIGNALS:  restart: 75
+        EXPECT:   flaky fails attempt 1 (exit 75), passes attempt 2
+               -> flaky green, build RUNS, workflow=success. Log shows 'attempt 2 of 3'
+    commands:
+      - echo "$${DESCRIPTION}"
+
   flaky:
     image: alpine
     commands:

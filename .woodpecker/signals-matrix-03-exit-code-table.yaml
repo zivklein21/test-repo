@@ -16,6 +16,21 @@ matrix:
     - 80
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-03-exit-code-table
+        SIGNALS:  skip: [78, 79]
+        MATRIX:   CODE=${CODE}
+        EXPECT:   CODE=0
+               -> build runs; 78,79
+               -> build skipped (success); 1
+               -> FAILURE; 80 (unmapped)
+               -> FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

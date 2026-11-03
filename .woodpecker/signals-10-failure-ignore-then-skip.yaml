@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     10-failure-ignore-then-skip
+        SIGNALS:  skip: 78
+        EXPECT:   lint fails with failure: ignore, then skip
+               -> build skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   lint:
     image: alpine
     commands:

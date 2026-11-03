@@ -8,20 +8,32 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     26-pause-waits-for-sibling
+        SIGNALS:  pause: 71
+        EXPECT:   (needs server UI) approve pauses only after slow-tests finished (~10s); then Resume
+               -> deploy runs
+    commands:
+      - echo "$${DESCRIPTION}"
+    depends_on: []
+
   approve:
     image: alpine
     commands:
       - exit 71
     signals:
       pause: 71
-    depends_on: []
+    depends_on: [describe]
 
   slow-tests:
     image: alpine
     commands:
       - sleep 10
       - echo "tests done"
-    depends_on: []
+    depends_on: [describe]
 
   deploy:
     image: alpine

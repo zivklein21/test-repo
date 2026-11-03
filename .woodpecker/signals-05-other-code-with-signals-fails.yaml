@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     05-other-code-with-signals-fails
+        SIGNALS:  skip: 78
+        EXPECT:   skip: 78 but exit 1
+               -> workflow=FAILURE
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

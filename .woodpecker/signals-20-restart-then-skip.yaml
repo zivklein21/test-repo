@@ -8,6 +8,17 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     20-restart-then-skip
+        SIGNALS:  restart: 75, skip: 78
+        EXPECT:   attempt 1 exit 75 (restart), attempt 2 exit 78 (skip)
+               -> check green, build skipped, workflow=success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

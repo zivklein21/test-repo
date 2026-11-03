@@ -13,6 +13,17 @@ matrix:
     - prod
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-10-pause-per-entry
+        SIGNALS:  pause: 71
+        MATRIX:   ENV=${ENV}
+        EXPECT:   (needs server UI) prod entry PAUSES with its own Resume/Decline buttons; dev entry runs through without pausing; resume/decline prod only affects prod
+    commands:
+      - echo "$${DESCRIPTION}"
+
   build:
     image: alpine
     commands:

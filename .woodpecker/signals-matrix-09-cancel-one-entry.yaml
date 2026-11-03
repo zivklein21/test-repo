@@ -15,6 +15,18 @@ matrix:
       CANCEL: "false"
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-09-cancel-one-entry
+        SIGNALS:  cancel: 70
+        MATRIX:   NAME=${NAME} CANCEL=${CANCEL}
+        EXPECT:   app-a cancels itself (KILLED, build never runs); app-b builds (success)
+               -> cancel only affects its own workflow
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check:
     image: alpine
     commands:

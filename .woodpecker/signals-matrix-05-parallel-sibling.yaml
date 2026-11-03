@@ -15,20 +15,32 @@ matrix:
       SKIP: "false"
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-05-parallel-sibling
+        SIGNALS:  skip: 78
+        MATRIX:   NAME=${NAME} SKIP=${SKIP}
+        EXPECT:   per entry: tests (parallel, slow) finish; package skipped when SKIP=true; all success
+    commands:
+      - echo "$${DESCRIPTION}"
+    depends_on: []
+
   check:
     image: alpine
     commands:
       - if [ "${SKIP}" = "true" ]; then exit 78; fi
     signals:
       skip: 78
-    depends_on: []
+    depends_on: [describe]
 
   tests:
     image: alpine
     commands:
       - sleep 2
       - echo "tests for ${NAME} finished"
-    depends_on: []
+    depends_on: [describe]
 
   package:
     image: alpine

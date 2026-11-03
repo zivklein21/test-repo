@@ -8,6 +8,18 @@ when:
 skip_clone: true
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     22-cancel-workflow
+        SIGNALS:  cancel: 70
+        EXPECT:   check exits 70 (cancel)
+               -> check green, slow-sibling stopped (killed), deploy never runs, workflow=KILLED
+    commands:
+      - echo "$${DESCRIPTION}"
+    depends_on: []
+
   check:
     image: alpine
     commands:
@@ -15,14 +27,14 @@ steps:
       - exit 70
     signals:
       cancel: 70
-    depends_on: []
+    depends_on: [describe]
 
   slow-sibling:
     image: alpine
     commands:
       - sleep 30
       - echo "SHOULD NOT FINISH"
-    depends_on: []
+    depends_on: [describe]
 
   deploy:
     image: alpine

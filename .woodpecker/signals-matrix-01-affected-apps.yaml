@@ -14,6 +14,17 @@ matrix:
     - app-c
 
 steps:
+  describe:
+    image: alpine
+    environment:
+      DESCRIPTION: |
+        TEST:     matrix-01-affected-apps
+        SIGNALS:  skip: 78
+        MATRIX:   NAME=${NAME}
+        EXPECT:   app-a builds; app-b and app-c: check green, build skipped; ALL workflows success
+    commands:
+      - echo "$${DESCRIPTION}"
+
   check-affected:
     image: alpine
     commands:
